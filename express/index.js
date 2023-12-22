@@ -2,7 +2,7 @@ const express=require('express');
 const app=express();  //express object
 
 app.listen(8080);
-app.use(express.json());
+app.use(express.json());    //to make it json
 
 app.get('/v1/student',(req,res) =>{
     console.log('Hello World');
@@ -38,11 +38,31 @@ app.route('/v1/student')
 
 /*
 Api's for
-1)Profile get
-2)Profile Update
-3)Getting Attendance
-4)Posting todays attendance
-5)Getting fees details
+1)Profile get    -- Get /v1/profile
+2)Profile Update   --PUT /v1/profile
+3)Getting Attendance   --GET /v1/attendance
+4)Posting todays attendance    -- PUT /v1/attendance
+5)Getting fees details    -- GET /v1/fee/current   --GET /v1/fee/TRANSAVTION   --  /v1/fee/miscellaneous
+
  */
 
 
+
+
+app.get('/v1/student/profile',(req,res)=>{
+    console.log("Getting Profile");
+    res.send(req.query.profile_id);
+    console.log(req.query.profile_id)
+})
+
+//two functions in the same API
+
+app.put('/v1/student/profile',(req,res,next)=>{
+    res.write('hello world');
+    next()
+    res.end()
+},(req,res)=>{
+    console.log('Hello world Put');
+    console.log(req.body);
+    res.end('heyy');
+});
