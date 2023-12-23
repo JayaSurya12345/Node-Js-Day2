@@ -86,10 +86,78 @@ const StudentModel=mongoose.model('student',StudentSchema);
 
 //Deleting the documents in the databases
 
-app.delete('/student',(req,res)=>{
-    const del={"_id": new mongoose.Types.ObjectId(req.query.id)}
-    return StudentModel.deleteOne(del)
+// app.delete('/student',(req,res)=>{
+//     const del={"_id": new mongoose.Types.ObjectId(req.query.id)}
+//     return StudentModel.deleteOne(del)
+//     .then(result=>{
+//         return res.end(JSON.stringify(result));
+//     })
+// })
+
+
+
+//Sorting 
+
+//  1 ->ascending order
+//  -1 ->descending order
+
+// app.get('/student',(req,res)=>{
+//     return StudentModel.find()
+//     .sort({'rollnumber':-1})
+//     .then(result=>{
+//         res.send(JSON.stringify(result));
+//     })
+
+// })
+
+
+///Multiple Sorting
+
+// app.get('/student',(req,res)=>{
+//     return StudentModel.find()
+//     .sort({'rollnumber':-1,'first_name':1})
+//     .then(result=>{
+//         res.send(JSON.stringify(result));
+//     })
+
+// })
+
+
+//Pagenation 
+
+//displaying the second largest roll number in the document
+
+//mongo index starts from 1
+
+// app.get('/student',(req,res)=>{
+//     return StudentModel.find()
+//     .sort({'rollnumber':-1})
+//     .skip(2)     //Skips the first two elements in the sorted array
+//     .limit(1)     //prints only the first element as its limit is one after skipping
+//     .then(result=>{
+//         res.send(JSON.stringify(result));
+//     })
+
+// })
+
+
+
+//Sorting with Pagenation
+
+//  ((Page-1)*limit)+1
+
+
+app.get('/student',(req,res)=>{
+    const sort={};
+    sort[req.body.sortby]=req.body.orderby;
+    return StudentModel.find({})
+    .sort(`{${req.body.sortby}:${req.body.orderby}}`)
+    .skip((req.body.page-1)*req.body.limit)
+    .limit(req.body.limit)
     .then(result=>{
-        return res.end(JSON.stringify(result));
+        res.send(JSON.stringify(result));
     })
+
 })
+
+
